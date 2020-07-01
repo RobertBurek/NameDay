@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NameDay Spring</title>
+    <link rel="stylesheet" th:href="@{/css/normalize.css}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/nameDay"><img th:src="@{/img/logo.jpg}" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/loginOpenID}">Login
+<!--                        <img src="https://github.com/fluidicon.png" style="height: 19px; width: 19px;"/>-->
+<!--                        <img th:src="@{/img/LogoChrome.png}" style="height: 19px; width: 19px;"/>-->
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://robertburek.pl" target="_blank">Autor</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="POST" action="/nameDay/edit" th:object="${nameDayFind}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Kogo imieniny?"
+                       th:field="*{name}">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+            </form>
+        </div>
+    </nav>
+    <main>
+        <article style="height: 600px;">
+            <h3 th:text="'Daty przypisane do imienia: '+ ${nameDayNew.name}">Znalezione spółki: </h3>
+            <p></p>
+            <div style="height: 95%; overflow: auto;">
+                <table class="table table-hover bg-light">
+                    <thead>
+                    <tr>
+                        <!--<th>Id</th>-->
+                        <th>Imie</th>
+                        <th>Dzień imienin</th>
+                        <th>Edycja</th>
+                        <!--                        <th>Usuwanie</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="nameDay: ${nameDays}">
+                        <!--<td th:text="${nameDay.id}"/>-->
+                        <td th:text="${nameDay.name}"/>
+                        <td th:text="${nameDay.dayMonth}"/>
+                        <td><a th:href="@{/nameDay/edit(index=${nameDay.id})}"><i class="fa fa-edit"></i></a></td>
+                        <!--                        <td><a href="#">Edytuj</a></td>-->
+                        <!--                        <td><a th:href="@{/nameDay/del(index=${nameDay.id})}">Usuń</a></td>-->
+                        <!--                        <td><a href="#">Usuń</a></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <aside>
+            <section class="widget">
+                </br></br></br>
+                <h5>Zmodyfikuj dane:</h5>
+<!--                action="/nameDay/save/edit"-->
+                <form method="POST" th:action="@{/nameDay/save/edit}"  th:object="${nameDayNew}">
+                    <input th:field="*{id}" class="form-control" id="id" type="hidden">
+                    <div class="form-group">
+                        <label for="name">Podaj:</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="name" name="name"
+                               placeholder="Imię">
+                    </div>
+                    <div class="form-group">
+                        <label for="nameDay">Dzień imienin:</label>
+                        <input th:field="*{dayMonth}" type="text" class="form-control" id="nameDay" name="nameDay"
+                               placeholder="DD-MM">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Modyfikuj</button>
+
+                </form>
+            </section>
+            <a class="btn btn-outline-success" href="/nameDay">Powrót</a>
+        </aside>
+    </main>
+    <footer>
+        <p>Copyright &copy; 2020 - <a href="http://robertburek.pl" target="_blank">Robert Burek</a></p>
+    </footer>
+</div>
+</body>
+</html>

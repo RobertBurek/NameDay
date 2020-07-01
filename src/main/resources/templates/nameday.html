@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NameDay Spring</title>
+    <link rel="stylesheet" th:href="@{/css/normalize.css}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/nameDay"><img th:src="@{/img/logo.jpg}" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/loginOpenID}">Login
+<!--                        <img src="https://github.com/fluidicon.png" style="height: 19px; width: 19px;"/>-->
+<!--                        <img th:src="@{/img/LogoChrome.png}" style="height: 19px; width: 19px;"/>-->
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://robertburek.pl" target="_blank">Autor</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="POST" action="/nameDay" th:object="${nameDayFind}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Kogo imieniny?"
+                       th:field="*{name}">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+            </form>
+        </div>
+    </nav>
+    <main>
+        <article>
+            <h1>Czas imienin, czas zabawy - tylko kiedy?</h1>
+            <img th:src="@{/img/foto3.jpg}" alt=""/>
+            <p></p>
+            <p>Impreza imieninowa, fajny sposób na spędzenie czasu ze znajomymi. <strong>Tylko!!!</strong> Wypada
+                wiedzieć, kiedy jest ten dzień. Miło jest zrobić komuś niespodziankę. <strong>Ale!!!</strong> Trzeba
+                wiedzieć kiedy. </p>
+            <p>Teraz poza tym, że masz do dyspozycji wujka Googla, ja wystawiłem Ci aplikację restową, dzięki której
+                możesz na swojej stronie bez problemu zamieścić informację przypominającą Ci o dacie imienin przyjaciela
+                czy znajomego.</p>
+            <p>Aplikacja wymaga uzupełnienia danymi, więc jak masz ochotę i trochę czasu, to proszę podaj kilka
+                prawdziwych dat imienin. W ten sposób przysłużysz się innym zapominalskim.</p>
+            <!--            <p><strong>Baza testowa na H2 !!! </strong> Nie zapamiętuje wprowadzonych zmian.</p>-->
+            <form class="form-inline my-2 my-lg-0" method="POST" action="/nameDay" th:object="${nameDayFind}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Imieniny kogo?"
+                       th:field="*{name}">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+            </form>
+            </br>
+            <div class="listNameDays" id="position">
+                <table class="table table-hover bg-light">
+                    <thead>
+                    <tr>
+                        <!--<th>Id</th>-->
+                        <th>Imie</th>
+                        <th>Dzień imienin</th>
+                        <th>Edycja</th>
+                        <th>Usuwanie</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="nameDay: ${nameDays}">
+                        <!--<td th:text="${nameDay.id}"/>-->
+                        <td th:text="${nameDay.name}"/>
+                        <td th:text="${nameDay.dayMonth}"/>
+                        <td><a th:href="@{/nameDay/edit(index=${nameDay.id})}"><i class="fa fa-edit"></i></a></td>
+                        <!--                        <td><a href="#">Edytuj</a></td>-->
+                        <td><a th:href="@{/nameDay/del(index=${nameDay.id})}"><i class="fa fa-trash"></i></a></td>
+                        <!--                        <td><a href="#">Usuń</a></td>-->
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </article>
+        <aside>
+            <section class="widget">
+                <h3>O projekcie</h3>
+                <img th:src="@{/img/Ja_2018.jpg}" alt="">
+
+                <p>NameDay to restowa aplikacja wykonana w ramach zajęć w projekcie PROGRAMATOR zorganizowanym przez
+                    firmę Altkom - kurs Java WEB Developer.</p>
+                <p>Aplikacja poza widokiem strony wystawia API REST na właściwych endpointach. Informacja na ich temat
+                    znajduje się pod adresem
+                    <a href="https://name-day.herokuapp.com/swagger-ui.html" target="_blank">name-day</a> na HEROKU.
+                </p>
+            </section>
+            <section class="widget">
+                <h5>Formularz dodawania danych:</h5>
+                <form method="POST" th:action="@{/nameDay/save}" th:object="${nameDayNew}">
+                    <input th:field="*{id}" class="form-control" id="id" type="hidden" value="25">
+                    <div class="form-group">
+                        <label for="name">Podaj:</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="name" name="name"
+                               placeholder="Imię">
+                    </div>
+                    <div class="form-group">
+                        <label for="nameDay">Dzień imienin:</label>
+                        <input th:field="*{dayMonth}" type="text" class="form-control" id="nameDay" name="nameDay"
+                               placeholder="DD-MM">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Zapisz</button>
+                </form>
+                </br></br>
+                <h5>Inne webowe aplikacje:</h5>
+                <ul>
+                    <li>
+                        <a href="https://cars-database-app.herokuapp.com/cars" target="_blank">Lista samochodów, zrobiona w celach edukacyjnych, widok wykonany na Thymeleaf oraz Bootstrap!</a>
+                    </li>
+                    <li>
+                        <a href="https://app-lista-zakupow.herokuapp.com/design" target="_blank">ShippingList - w trakcie realizacji, wstępna wersja, ale bardzo rozwojowa!
+                            W pełni działająca wersja napisana została w javascript i jest wykorzystywana produkcyjnie w celach prywatnych.</a>
+                    </li>
+                    <li>
+                        <a href="#">Czekam, aż spłynie na mnie jakiś pomysł, który rozwinę w coś fajnego.</a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+    </main>
+    <footer>
+        <p>Copyright &copy; 2020 - <a href="http://robertburek.pl" target="_blank">Robert Burek</a></p>
+    </footer>
+</div>
+</body>
+</html>
